@@ -1,0 +1,6 @@
+sp-stress-ui (0.1) unstable; urgency=low
+
+  * Fixes: NB#278612 - MTF or QML UI tool to eat memory, to simulate & trigger
+    UI application OOM
+
+ -- Tommi Rantala <ext-tommi.1.rantala@nokia.com>  Thu, 25 Aug 2011 12:44:04 +0300

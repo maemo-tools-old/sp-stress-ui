@@ -1,0 +1,20 @@
+Source: sp-stress-ui
+Section: user/utilities
+Priority: extra
+Maintainer: Eero Tamminen <eero.tamminen@nokia.com>
+Build-Depends: debhelper (>= 7), libqt4-dev, applauncherd-dev, pkg-config
+Standards-Version: 3.9.1
+
+Package: sp-stress-ui
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}, qt-components, applauncherd-invoker
+Description: UI applications for system stress testing
+ Contains the graphical sp-memload application for stress testing the system
+ with different sizes of memory allocations.
+
+Package: sp-stress-ui-dbg
+Section: debug
+Architecture: any
+Depends: ${misc:Depends}, sp-stress-ui (= ${binary:Version})
+Description: debugging symbols for sp-stress-ui
+ Contains the debugging information for the sp-stress-ui package.

@@ -1,0 +1,5 @@
+[Desktop Entry]
+Type=Application
+Name=sp-memload
+Icon=/usr/share/icons/sp-memload-ui.svg
+Exec=/usr/bin/invoker --single-instance --type=d /usr/bin/sp-memload-ui
