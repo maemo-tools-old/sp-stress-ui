@@ -1,3 +1,13 @@
+sp-stress-ui (0.2) unstable; urgency=low
+
+  * sp-memload updates:
+    - The `update statistics' now always enabled when memory has been
+      allocated.
+    - Perform delayed cgroup name update after swiping the UI to background,
+      so that we will show the correct group in the UI thumbnail.
+
+ -- Tommi Rantala <ext-tommi.1.rantala@nokia.com>  Mon, 05 Sep 2011 14:50:57 +0300
+
 sp-stress-ui (0.1) unstable; urgency=low
 
   * Fixes: NB#278612 - MTF or QML UI tool to eat memory, to simulate & trigger
