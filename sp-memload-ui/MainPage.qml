@@ -77,16 +77,21 @@ Page {
 			spacing: 6
 			Label { text: qsTr("<h1>sp-memload</h1>"); width: parent.width }
 			Item { width: parent.width; height: 10 }
-
-			Label { text: qsTr("<h2>Memory Allocation</h2>"); width: parent.width }
+			Label {
+				text: qsTr("Memory Allocation")
+				width: parent.width
+				font.pixelSize: UI.FONT_SLARGE
+				font.bold: true
+			}
 			Row {
 				width: parent.width
 				enabled: !memload.busy
 				Label {
 					width: parent.width / 4
-					text: qsTr("<h4>Size:</h4>")
+					text: qsTr("Size:")
 					verticalAlignment: Text.AlignVCenter
 					height: newAllocation.height
+					font.bold: true
 				}
 				TextField {
 					id: newAllocation
@@ -102,9 +107,10 @@ Page {
 				spacing: 4
 				Label {
 					width: parent.width / 4 - 2
-					text: qsTr("<h4>Fill:</h4>")
+					text: qsTr("Fill:")
 					verticalAlignment: Text.AlignVCenter
 					height: fillStyle.height
+					font.bold: true
 				}
 				ButtonRow {
 					id: fillStyle
@@ -161,7 +167,8 @@ Page {
 				}
 			}
 			Label {
-				text: qsTr("<font color='red'>Allocation failed!</font>")
+				text: qsTr("Allocation failed!")
+				color: "red"
 				visible: memload.allocationFailed
 				width: parent.width
 				horizontalAlignment: Text.AlignHCenter
@@ -197,7 +204,12 @@ Page {
 				width: parent.width
 				height: 16
 			}
-			Label { text: qsTr("<h2>Control Group</h2>"); width: parent.width }
+			Label {
+				text: qsTr("Control Group")
+				font.pixelSize: UI.FONT_SLARGE
+				font.bold: true
+				width: parent.width
+			}
 			Label {
 				width: parent.width
 				text: {
@@ -220,7 +232,11 @@ Page {
 					return result;
 				}
 			}
-			Label { text: qsTr("<h3>Group statistics</h3>"); width: parent.width }
+			Label {
+				text: qsTr("Group statistics")
+				font.bold: true
+				width: parent.width
+			}
 			Label {
 				width: parent.width
 				visible: cgroupInfo.memoruUsage != -1
