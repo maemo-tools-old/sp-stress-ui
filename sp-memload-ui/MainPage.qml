@@ -175,6 +175,7 @@ Page {
 			}
 			Label { text: qsTr("<h2>Control Group</h2>"); width: parent.width }
 			Label {
+				width: parent.width
 				text: {
 					var cg = cgroupInfo.cgroup.split("/");
 					var result = "";
