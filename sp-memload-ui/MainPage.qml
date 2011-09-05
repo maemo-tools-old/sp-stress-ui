@@ -26,6 +26,7 @@ import "file:///usr/lib/qt4/imports/com/nokia/meego/UIConstants.js" as UI
 
 Page {
 	id: mainpage
+	anchors.bottomMargin: UI.DEFAULT_MARGIN
 
 	MemoryLoad {
 		id: memload
@@ -65,18 +66,45 @@ Page {
 			delayedStatisticsUpdate2sec.restart()
 		}
 	}
-
-	anchors.margins: 16
+	Rectangle {
+		id: header
+		x: 0
+		y: 0
+		width: parent.width
+		height: UI.HEADER_DEFAULT_HEIGHT_PORTRAIT
+		clip: true
+		color: "#E00000"
+		Text {
+			id: progname
+			text: "sp-memload"
+			font.pixelSize: UI.FONT_XLARGE
+			font.family: UI.FONT_FAMILY_LIGHT
+			color: UI.COLOR_INVERTED_FOREGROUND
+			x: UI.DEFAULT_MARGIN
+			y: UI.HEADER_DEFAULT_TOP_SPACING_PORTRAIT
+		}
+		BusyIndicator {
+			opacity: memload.busy
+			running: memload.busy
+			x: parent.width - width - UI.DEFAULT_MARGIN
+			y: UI.HEADER_DEFAULT_TOP_SPACING_PORTRAIT
+			Behavior on opacity { NumberAnimation { } }
+			platformStyle: BusyIndicatorStyle { inverted: true }
+		}
+		z: 10
+	}
 	Flickable {
-		anchors.fill: parent
+		width: parent.width - 2*UI.DEFAULT_MARGIN
+		x: UI.DEFAULT_MARGIN
+		anchors.topMargin: UI.DEFAULT_MARGIN
+		anchors.top: header.bottom
+		anchors.bottom: parent.bottom
 		contentHeight: content.height
 		flickableDirection: Flickable.VerticalFlick
 		Column {
 			id: content
 			width: parent.width
 			spacing: 6
-			Label { text: qsTr("<h1>sp-memload</h1>"); width: parent.width }
-			Item { width: parent.width; height: 10 }
 			Label {
 				text: qsTr("Memory Allocation")
 				width: parent.width
