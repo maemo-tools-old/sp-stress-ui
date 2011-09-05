@@ -166,7 +166,6 @@ Page {
 				width: parent.width
 				text: qsTr("Update statistics")
 				opacity: memload.allocatedMemory > 0
-				enabled: !memload.busy
 				onClicked: memload.updateAllocationInfo();
 			}
 
