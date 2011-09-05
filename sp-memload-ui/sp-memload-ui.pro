@@ -9,7 +9,7 @@ target.path = /usr/bin
 desktop.path = /usr/share/applications
 desktop.files = sp-memload-ui.desktop
 icon.path = /usr/share/icons
-icon.files = sp-memload-ui.svg
+icon.files = sp-memload-ui.png
 
 TRANSLATIONS += \
 	sp-memload-ui_fi.ts
