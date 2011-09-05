@@ -34,11 +34,34 @@ Page {
 		id: cgroupInfo
 	}
 
+	function update() {
+		memload.updateAllocationInfo();
+		cgroupInfo.update();
+	}
+
+	/* Policy (eventually) changes our control group after swiping the
+	 * application to background. Do one-shot updates so that we might show
+	 * the new group in the thumbnail.
+	 */
+	Timer {
+		id: delayedStatisticsUpdate100ms
+		interval: 100
+		repeat: false
+		onTriggered: update();
+	}
+	Timer {
+		id: delayedStatisticsUpdate2sec
+		interval: 2000
+		repeat: false
+		onTriggered: update();
+	}
+
 	Connections {
 		target: platformWindow
 		onActiveChanged: {
-			memload.updateAllocationInfo();
-			cgroupInfo.update();
+			update();
+			delayedStatisticsUpdate100ms.restart()
+			delayedStatisticsUpdate2sec.restart()
 		}
 	}
 
