@@ -23,6 +23,52 @@
 #include <QDebug>
 #include <QString>
 #include <QStringList>
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <unistd.h>
+
+static bool
+self_cgroup_available()
+{
+	struct stat statbuf;
+	memset(&statbuf, 0, sizeof(struct stat));
+	if (stat("/proc/self/cgroup", &statbuf) == -1)
+		return false;
+	if (!S_ISREG(statbuf.st_mode))
+		return false;
+	return true;
+}
+
+static bool
+syspart_available()
+{
+	struct stat statbuf;
+	memset(&statbuf, 0, sizeof(struct stat));
+	if (stat("/syspart", &statbuf) == -1)
+		return false;
+	if (!S_ISDIR(statbuf.st_mode))
+		return false;
+	return true;
+}
+
+CgroupInfo::CgroupInfo(QObject *parent)
+	: QObject(parent)
+	, _haveCgroup(false)
+	, _haveCgroupStatistics(false)
+{
+	_haveCgroup = self_cgroup_available();
+	_haveCgroupStatistics = _haveCgroup && syspart_available();
+}
+
+bool CgroupInfo::haveCgroup() const
+{
+	return _haveCgroup;
+}
+
+bool CgroupInfo::haveCgroupStatistics() const
+{
+	return _haveCgroup;
+}
 
 QString CgroupInfo::cgroup() const
 {
@@ -32,7 +78,9 @@ QString CgroupInfo::cgroup() const
 	QString cgroup;
 	QStringList splitted;
 	ssize_t ret;
-	FILE *fp;
+	FILE *fp = NULL;
+	if (!_haveCgroup)
+		goto out;
 	fp = fopen("/proc/self/cgroup", "r");
 	if (!fp)
 		goto out;
@@ -54,9 +102,14 @@ out:
 int CgroupInfo::memoryUsage() const
 {
 	int usage = -1;
-	FILE *fp;
-	QString cg = cgroup();
-	QString memlimit = QLatin1String("/syspart") + cg
+	FILE *fp = NULL;
+	QString cg, memlimit;
+	if (!_haveCgroupStatistics)
+		goto out;
+	cg = cgroup();
+	if (cg.isEmpty())
+		goto out;
+	memlimit = QLatin1String("/syspart") + cg
 		+ QLatin1String("/memory.usage_in_bytes");
 	fp = fopen(memlimit.toAscii(), "r");
 	if (!fp)
@@ -75,9 +128,14 @@ int CgroupInfo::swapUsage() const
 	qDebug() << Q_FUNC_INFO;
 	int swapUsage = -1;
 	int memswUsage = -1;
-	FILE *fp;
-	QString cg = cgroup();
-	QString memlimit = QLatin1String("/syspart") + cg
+	FILE *fp = NULL;
+	QString cg, memlimit;
+	if (!_haveCgroupStatistics)
+		goto out;
+	cg = cgroup();
+	if (cg.isEmpty())
+		goto out;
+	memlimit = QLatin1String("/syspart") + cg
 		+ QLatin1String("/memory.memsw.usage_in_bytes");
 	fp = fopen(memlimit.toAscii(), "r");
 	if (!fp) {
@@ -101,9 +159,14 @@ int CgroupInfo::memoryLimit() const
 {
 	qDebug() << Q_FUNC_INFO;
 	int limit = -1;
-	FILE *fp;
-	QString cg = cgroup();
-	QString memlimit = QLatin1String("/syspart") + cg
+	FILE *fp = NULL;
+	QString cg, memlimit;
+	if (!_haveCgroupStatistics)
+		goto out;
+	cg = cgroup();
+	if (cg.isEmpty())
+		goto out;
+	memlimit = QLatin1String("/syspart") + cg
 		+ QLatin1String("/memory.limit_in_bytes");
 	fp = fopen(memlimit.toAscii(), "r");
 	if (!fp) {
@@ -123,7 +186,12 @@ out:
 
 void CgroupInfo::update()
 {
+	if (!_haveCgroup)
+		return;
 	emit cgroupChanged();
+
+	if (!_haveCgroupStatistics)
+		return;
 	emit memoryUsageChanged();
 	emit swapUsageChanged();
 	emit memoryLimitChanged();

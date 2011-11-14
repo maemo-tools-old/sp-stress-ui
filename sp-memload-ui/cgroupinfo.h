@@ -27,9 +27,15 @@
 class CgroupInfo : public QObject
 {
 	Q_OBJECT
+	Q_PROPERTY(bool haveCgroup
+			READ haveCgroup
+			NOTIFY haveCgroupChanged)
 	Q_PROPERTY(QString cgroup
 			READ cgroup
 			NOTIFY cgroupChanged)
+	Q_PROPERTY(bool haveCgroupStatistics
+			READ haveCgroupStatistics
+			NOTIFY haveCgroupStatisticsChanged)
 	Q_PROPERTY(int memoryUsage
 			READ memoryUsage
 			NOTIFY memoryUsageChanged)
@@ -41,19 +47,34 @@ class CgroupInfo : public QObject
 			NOTIFY memoryLimitChanged)
 
 public:
-	CgroupInfo(QObject *parent = 0) : QObject(parent) {}
+	CgroupInfo(QObject *parent = 0);
 	~CgroupInfo() {}
-	Q_INVOKABLE QString cgroup() const;
-	Q_INVOKABLE void update();
+
+	/* Do we have /proc/self/cgroup? */
+	bool haveCgroup() const;
+	QString cgroup() const;
+
+	/* Do we have /syspart? */
+	bool haveCgroupStatistics() const;
 	int memoryUsage() const;
 	int swapUsage() const;
 	int memoryLimit() const;
 
+public slots:
+	void update();
+
 signals:
+	void haveCgroupChanged();
 	void cgroupChanged();
+
+	void haveCgroupStatisticsChanged();
 	void memoryUsageChanged();
 	void swapUsageChanged();
 	void memoryLimitChanged();
+
+private:
+	bool _haveCgroup;
+	bool _haveCgroupStatistics;
 };
 
 #endif /* CGROUPINFO */
