@@ -2,5 +2,6 @@
 	<qresource prefix="/">
 		<file>qmldir/main.qml</file>
 		<file>qmldir/MainPage.qml</file>
+		<file>qmldir/CgroupInformation.qml</file>
 	</qresource>
 </RCC>

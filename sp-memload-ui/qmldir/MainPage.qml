@@ -230,66 +230,11 @@ Page {
 
 			Item {
 				width: parent.width
-				height: 16
+				height: cgroupInfo.haveCgroup ? 16 : 0
 			}
-			Label {
-				text: qsTr("Control Group")
-				font.pixelSize: UI.FONT_SLARGE
-				font.bold: true
+			CgroupInformation {
+				cgroupInfo: cgroupInfo
 				width: parent.width
-			}
-			Label {
-				width: parent.width
-				text: {
-					var cg = cgroupInfo.cgroup.split("/");
-					var result = "";
-					var indent = 0;
-					for (var c in cg) {
-						if (cg[c] == "")
-							continue;
-						if (indent == 0) {
-							result += ("/" + cg[c]);
-						} else {
-							var i = "<br/>";
-							for (var j = 0; j < indent ; ++j)
-								i += "&nbsp;&nbsp;&nbsp;";
-							result += (i + "\u2192/" + cg[c]);
-						}
-						++indent;
-					}
-					return result;
-				}
-			}
-			Label {
-				text: qsTr("Group statistics")
-				font.bold: true
-				width: parent.width
-			}
-			Label {
-				width: parent.width
-				visible: cgroupInfo.memoruUsage != -1
-				text: qsTr("Memory usage: <b>%1&nbsp;MB</b> or <b>%2&nbsp;kB</b>.")
-					.arg(Math.floor(cgroupInfo.memoryUsage / 1024 / 1024))
-					.arg(cgroupInfo.memoryUsage / 1024)
-			}
-			Label {
-				width: parent.width
-				visible: cgroupInfo.memoruUsage != -1 && cgroupInfo.memoryLimit != -1
-				text: qsTr("Memory limit: <b>%1&nbsp;MB</b> or <b>%2&nbsp;kB</b> (%3% used).")
-					.arg(Math.floor(cgroupInfo.memoryLimit / 1024 / 1024))
-					.arg(cgroupInfo.memoryLimit / 1024)
-					.arg(Math.floor(100 * (cgroupInfo.memoryUsage / cgroupInfo.memoryLimit)))
-			}
-			Label {
-				width: parent.width
-				visible: cgroupInfo.swapUsage != -1
-				text: qsTr("Swap usage: <b>%1&nbsp;MB</b>.")
-					.arg(Math.floor(cgroupInfo.swapUsage / 1024 / 1024))
-			}
-			Button {
-				width: parent.width
-				text: qsTr("Update")
-				onClicked: cgroupInfo.update();
 			}
 		}
 	}
