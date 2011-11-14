@@ -38,7 +38,7 @@ Q_DECL_EXPORT int main(int argc, char **argv)
 	app->setProperty("NoMStyle", true);
 	qmlRegisterType<MemoryLoad>("com.nokia.endurance", 1, 0, "MemoryLoad");
 	qmlRegisterType<CgroupInfo>("com.nokia.endurance", 1, 0, "CgroupInfo");
-	window->setSource(QUrl("qrc:/main.qml"));
+	window->setSource(QUrl("qrc:/qmldir/main.qml"));
 	window->showFullScreen();
 	return app->exec();
 }
