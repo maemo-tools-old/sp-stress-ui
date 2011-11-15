@@ -20,3 +20,5 @@ qm.files = sp-memload-ui_*.qm
 INSTALLS += target desktop icon qm
 DEFINES += QT_NO_DEBUG_OUTPUT
 CONFIG += qdeclarative-boostable
+
+DEFINES += USE_BOOSTER
