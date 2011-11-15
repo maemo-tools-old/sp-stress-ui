@@ -1,3 +1,9 @@
+sp-stress-ui (0.3) unstable; urgency=low
+
+  * Fixes: NB#290171 - sp-memload-ui cgroup support should be optional
+
+ -- Tommi Rantala <ext-tommi.1.rantala@nokia.com>  Tue, 15 Nov 2011 13:39:23 +0200
+
 sp-stress-ui (0.2) unstable; urgency=low
 
   * sp-memload updates:
