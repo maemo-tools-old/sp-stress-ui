@@ -21,16 +21,26 @@
 
 #include "memoryload.h"
 #include "cgroupinfo.h"
-#include <MDeclarativeCache>
 #include <QApplication>
 #include <QtDeclarative>
 #include <QtGlobal>
 #include <QTranslator>
 
+#ifdef USE_BOOSTER
+#include <MDeclarativeCache>
+#endif
+
 Q_DECL_EXPORT int main(int argc, char **argv)
 {
-	QApplication *app = MDeclarativeCache::qApplication(argc, argv);
-	QDeclarativeView *window = MDeclarativeCache::qDeclarativeView();
+	QApplication *app = NULL;
+	QDeclarativeView *window = NULL;
+#ifdef USE_BOOSTER
+	app = MDeclarativeCache::qApplication(argc, argv);
+	window = MDeclarativeCache::qDeclarativeView();
+#else
+	app = new QApplication(argc, argv);
+	window = new QDeclarativeView();
+#endif
 	QTranslator translator;
 	translator.load("sp-memload-ui_" + QLocale::system().name(),
 			"/usr/share/l10n/meegotouch");
