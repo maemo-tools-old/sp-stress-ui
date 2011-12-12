@@ -1,2 +1,2 @@
 TEMPLATE = subdirs
-SUBDIRS += sp-memload-ui
+SUBDIRS += sp-stress-ui-plugin sp-memload-ui

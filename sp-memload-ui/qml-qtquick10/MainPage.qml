@@ -21,7 +21,7 @@
 
 import QtQuick 1.1
 import com.nokia.meego 1.0
-import com.nokia.endurance 1.0
+import com.nokia.SpStressUi 1.0
 import "file:///usr/lib/qt4/imports/com/nokia/meego/UIConstants.js" as UI
 
 Page {

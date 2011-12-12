@@ -1,7 +1,7 @@
 TEMPLATE = app
 DEPENDPATH += .
-HEADERS += memoryload.h cgroupinfo.h
-SOURCES += memoryload.cpp cgroupinfo.cpp main.cpp
+INCLUDEPATH += ../sp-stress-ui-plugin
+SOURCES += main.cpp
 RESOURCES += qmlfiles.qrc
 QT += declarative
 

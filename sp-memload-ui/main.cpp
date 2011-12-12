@@ -46,8 +46,6 @@ Q_DECL_EXPORT int main(int argc, char **argv)
 			"/usr/share/l10n/meegotouch");
 	app->installTranslator(&translator);
 	app->setProperty("NoMStyle", true);
-	qmlRegisterType<MemoryLoad>("com.nokia.endurance", 1, 0, "MemoryLoad");
-	qmlRegisterType<CgroupInfo>("com.nokia.endurance", 1, 0, "CgroupInfo");
 	window->setSource(QUrl("qrc:/qml-qtquick10/main.qml"));
 	window->showFullScreen();
 	return app->exec();
