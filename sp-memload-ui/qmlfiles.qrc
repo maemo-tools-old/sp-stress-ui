@@ -1,7 +1,7 @@
 <RCC>
 	<qresource prefix="/">
-		<file>qmldir/main.qml</file>
-		<file>qmldir/MainPage.qml</file>
-		<file>qmldir/CgroupInformation.qml</file>
+		<file>qml-qtquick10/main.qml</file>
+		<file>qml-qtquick10/MainPage.qml</file>
+		<file>qml-qtquick10/CgroupInformation.qml</file>
 	</qresource>
 </RCC>
