@@ -12,3 +12,8 @@ other.files = qmldir
 INSTALLS += target other
 
 DEFINES += QT_NO_DEBUG_OUTPUT
+
+!$$MAEMO6 {
+	message("Building with Maemo 6 features.")
+	DEFINES += MAEMO6
+}
