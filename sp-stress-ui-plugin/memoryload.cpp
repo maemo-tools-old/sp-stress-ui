@@ -205,6 +205,11 @@ void MemoryLoad::updateAllocationInfo()
 	emit allocationInfoChanged();
 }
 
+static QString get_smaps_entries(FILE *);
+static int fseek_smaps_blob(FILE *);
+
+#ifdef MAEMO6
+
 /* Optimization hack for faster parsing of /proc/self/smaps on Harmattan. After
  * reading the first line that tells the mapping, we know that the following 13
  * lines are 28 bytes each.
@@ -227,6 +232,51 @@ KernelPageSize:        4 kB
 MMUPageSize:           4 kB
 Locked:                0 kB
 */
+
+static QString
+get_smaps_entries(FILE *fp)
+{
+	char buf[HARMATTAN_SMAPS_BLOB_BYTES];
+	size_t r = fread(buf, 1, sizeof(buf), fp);
+	if (r != sizeof(buf))
+		return QString();
+	buf[sizeof(buf)-1] = '\0';
+	return QString(buf);
+}
+
+static int
+fseek_smaps_blob(FILE *fp)
+{
+	return fseek(fp, HARMATTAN_SMAPS_BLOB_BYTES, SEEK_CUR);
+}
+
+#else
+
+static QString
+get_smaps_entries(FILE *fp)
+{
+	char *line = NULL;
+	size_t line_n = 0;
+	QString ret;
+	while (getline(&line, &line_n, fp) != -1) {
+		if (line[0] < 'A'
+		    || line[0] > 'Z'
+		    || strchr(line, ':') == NULL)
+			break;
+		ret += line;
+	}
+	free(line);
+	return ret;
+}
+
+static int
+fseek_smaps_blob(FILE *)
+{
+	return 0;
+}
+
+#endif
+
 QString MemoryLoad::allocationInfo() const
 {
 	qDebug() << Q_FUNC_INFO;
@@ -253,27 +303,24 @@ QString MemoryLoad::allocationInfo() const
 		}
 		unsigned start_addr = 0, end_addr = 0;
 		if (sscanf(line, "%x-%x", &start_addr, &end_addr) != 2) {
+#ifdef MAEMO6
 			qDebug() << Q_FUNC_INFO 
 				<< ": unable to parse start & end addresses"
 				   ", line:" << line;
 			goto out;
+#else
+			continue;
+#endif
 		}
 		void *start_ptr = (void *)start_addr;
 		void *end_ptr = (void *)end_addr;
 		if (start_ptr <= _buffer && _buffer < end_ptr) {
 			/* OK, found it! */
 			smaps += line;
-			char buf[HARMATTAN_SMAPS_BLOB_BYTES];
-			size_t r = fread(buf, 1, sizeof(buf), _smapsFP);
-			if (r != sizeof(buf)) {
-				goto out;
-			}
-			buf[sizeof(buf)-1] = '\0';
-			smaps += buf;
+			smaps += get_smaps_entries(_smapsFP);
 			goto out;
 		} else {
-			if (fseek(_smapsFP, HARMATTAN_SMAPS_BLOB_BYTES,
-						SEEK_CUR) == -1) {
+			if (fseek_smaps_blob(_smapsFP) == -1) {
 				qDebug() << Q_FUNC_INFO << ": fseek() failed.";
 				goto out;
 			}
